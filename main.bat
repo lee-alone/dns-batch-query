@@ -1,9 +1,18 @@
 @echo off
+setlocal EnableDelayedExpansion
 
-setlocal enabledelayedexpansion
+set "filename=chinalist.txt"
 
-for /f "tokens=*" %%a in (chinalist.txt) do (
-    ping -n 1 %%a | findstr /i /c:"Ping request" > nul && (echo %%a is resolved && color 0A) || (echo %%a is not resolved && color 0C)
+for /f "usebackq delims=" %%a in ("%filename%") do (
+    set "domain=%%a"
+    echo.
+    echo Resolving !domain!...
+    nslookup !domain! >nul 2>nul
+    if !errorlevel! equ 0 (
+        echo !domain! resolved successfully.
+    ) else (
+        echo Failed to resolve !domain!
+    )
 )
 
 endlocal
