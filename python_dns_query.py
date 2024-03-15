@@ -20,7 +20,6 @@ class DNSLookupThread(threading.Thread):
             print(f"警告：无法解析域名 {self.domain}")
             global failed_queries
             failed_queries += 1  # 记录无法解析的域名数量
-        time.sleep(self.interval)  # 线程查询间隔
 
 # 读取域名列表文件
 with open("chinalist.txt", "r") as file:
@@ -41,6 +40,7 @@ for domain in domain_list:
     thread = DNSLookupThread(domain, interval)
     threads.append(thread)
     thread.start()
+    time.sleep(interval / 1000)  # 线程之间的间隔
 
 # 等待所有查询线程结束
 for thread in threads:
